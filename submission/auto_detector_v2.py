@@ -3,7 +3,7 @@ import numpy as np
 import imutils 
 import distanceC_v3
 import FindLine_v3
-
+import edge_extraction_v2
 def auto_detection(path_tem_edge, path_test_edge, path_tem, path_test, line, distance):
     Move=center_moving(path_tem_edge,path_test_edge)
 
@@ -29,33 +29,9 @@ def auto_detection(path_tem_edge, path_test_edge, path_tem, path_test, line, dis
     print(angle,corr)
     im = cv2.imread(path_test)
     thresh = rotate(im,angle,find_center(path_test_edge)[0])
-    path='C:\\Users\\93115\\Desktop\\mat\\3-25test.jpg'
-    cv2.imwrite(path,thresh)
+    cv2.imwrite(path_test,thresh)
 
-    filename=path #原图的路径
-    img = cv2.imread(filename,0)
-    kernel = np.ones((3,3),np.uint8)
-    erosion = cv2.erode(img,kernel,iterations = 1)
-    # 膨胀
-    dilate = cv2.dilate(erosion,kernel,iterations = 1)
-    #  边缘提取 并保存图片
-    canny1=cv2.Canny(dilate,150,200)
-    #  去除孤立点
-    _, labels, stats, centroids = cv2.connectedComponentsWithStats(canny1)
-    i=0
-    for istat in stats:
-        if istat[4]<120:
-            #print(i)
-            print(istat[0:2])
-            if istat[3]>istat[4]:
-                r=istat[3]
-            else:r=istat[4]
-            cv2.rectangle(canny1,tuple(istat[0:2]),tuple(istat[0:2]+istat[2:4]) , 0,thickness=-1)  # 26
-        i=i+1
-    
-#  保存去除孤立点后的边缘提取图片 并展示
-    cv2.imwrite(path,canny1)
-
+    edge_extraction_v2.edge(path_test, path_test_edge)
     distance=[]
     point1=[]
     point2=[]
@@ -63,17 +39,17 @@ def auto_detection(path_tem_edge, path_test_edge, path_tem, path_test, line, dis
     point3=[]
     point4 = []
     for d in distances:
-        x=distanceC_v3.DistanceCalculate(path,d[0],d[1])
+        x=distanceC_v3.DistanceCalculate(path_test_edge,d[0],d[1])
         distance.append(x[0])
         point1.append(x[1])
         point2.append(x[2])
     for l in lines:
-        x=FindLine_v3.Line(path,l[0],l[1])
+        x=FindLine_v3.Line(path_test_edge,l[0],l[1])
         count.append(x[0])
         point3.append(x[1]) 
         point4.append(x[2])
     
-    img=cv2.imread(path)
+    img=cv2.imread(path_test_edge)
     # for i,p in enumerate(point):
     #     for x,y in p:
     #         img[x,y][1],img[x,y][2]=255,0
@@ -202,9 +178,9 @@ def calcPearsonCorr2(a,b):
 distances=[[[664,611],[676,719]],[[813,614],[828,716]]]
 # lines=[[[663,565],[788,592]],[[665,649],[785,670]],[[485,564],[629,591]],[[493,646],[651,684]]]
 lines=[[[578,602],[756,654]],[[580,688],[748,725]],[[744,604],[912,654]],[[580,688],[748,725]],[[750,677],[914,731]]]
-p1="C:\\Users\\93115\\Desktop\\mat\\3-26template.jpg" 
-p2="C:\\Users\\93115\\Desktop\\mat\\3-28test.jpg"
-p3="C:\\Users\\93115\\Desktop\\mat\\3-27canny_tem.jpg"  
-p4="C:\\Users\\93115\\Desktop\\mat\\3-27canny_test.jpg" 
+p1="C:\\Users\\93115\\Desktop\\mat\\test\\3-26template.jpg" 
+p2="C:\\Users\\93115\\Desktop\\mat\\test\\3-28test.jpg"
+p3="C:\\Users\\93115\\Desktop\\mat\\test\\3-27canny_tem.jpg"  
+p4="C:\\Users\\93115\\Desktop\\mat\\test\\3-27canny_test.jpg" 
 
 auto_detection(p3,p4,p1,p2,lines,distances)
