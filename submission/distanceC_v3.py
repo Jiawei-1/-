@@ -1,6 +1,6 @@
-# import cv2 
-# import numpy as np
-# np.set_printoptions(threshold=np.inf) 
+import cv2 
+import numpy as np
+np.set_printoptions(threshold=np.inf) 
 
 # path='C:\\Users\\93115\\Desktop\\mat\\3-6canny1.jpg' # 保存边缘提取后的图片位置
 
@@ -13,6 +13,7 @@ def DistanceCalculate(path,Left,Right): #测量上下边界的宽度 传入保�
     # cv2.namedWindow('Canny Edge', cv2.WINDOW_NORMAL) 
     # bbox = cv2.selectROI('Canny Edge',img ,False)
     cut = img[Left[1]:Right[1], Left[0]:Right[0]]
+    ret,cut = cv2.threshold(cut,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)  
     cv2.imwrite('C:\\Users\\93115\\Desktop\\mat\\cut.jpg', cut)#保存切割后的图片
     
     img=cut

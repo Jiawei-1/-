@@ -1,3 +1,6 @@
+import cv2 
+import numpy as np
+
 def Line(path, Left, Right): 
     # 测量边缘提取后的图片的线段长度，
     # 输入边缘提取后的照片路径，测量区域的左上点坐标和右下点坐标 
