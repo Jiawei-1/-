@@ -19,7 +19,8 @@ def DistanceCalculate(path,Left,Right): #测量上下边界的宽度 传入保�
     ret,cut = cv2.threshold(cut,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)  
     img=cut
 
-    distance = 600
+    distance = 10000 #预设的最大值
+    
     h, w = img.shape
     line = int(h/2)     #取中间轴
     conture_up=np.zeros(w)       #上方轮廓
